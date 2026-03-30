@@ -1,6 +1,5 @@
+oracleJdk-26.jdk/
 target/
 *.jar
 *.class
-*.log
 .DS_Store
-oracleJdk-26.jdk/
