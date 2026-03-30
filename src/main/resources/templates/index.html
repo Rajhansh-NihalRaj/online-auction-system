@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+</head>
+
+<body style="background:black;color:white;text-align:center;">
+
+<h2>Welcome <span th:text="${user}"></span></h2>
+<a href="/admin">Add Product</a>
+
+<div th:each="item:${items}">
+<h3 th:text="${item.name}"></h3>
+<p>₹ <span th:id="'price-'+${item.id}" th:text="${item.highestBid}"></span></p>
+<p th:id="'bidder-'+${item.id}" th:text="${item.highestBidder}"></p>
+
+<input th:id="'name-'+${item.id}">
+<input th:id="'bid-'+${item.id}">
+<button th:onclick="'sendBid('+${item.id}+')'">Bid</button>
+</div>
+
+<script>
+let s=new SockJS('/ws');let st=Stomp.over(s);
+st.connect({},()=>st.subscribe('/topic/bids',m=>{
+let b=JSON.parse(m.body);
+document.getElementById("price-"+b.itemId).innerText=b.amount;
+document.getElementById("bidder-"+b.itemId).innerText=b.bidder;
+}));
+
+function sendBid(id){
+st.send("/app/bid",{},JSON.stringify({
+itemId:id,
+bidder:document.getElementById("name-"+id).value,
+amount:document.getElementById("bid-"+id).value
+}));
+}
+</script>
+
+</body>
+</html>
