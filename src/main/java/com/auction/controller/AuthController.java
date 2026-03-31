@@ -28,9 +28,9 @@ public class AuthController {
         return "redirect:/login";
     }
 
-    // ✅ VERY IMPORTANT (this fixes your issue)
+    // ✅ HOME AFTER LOGIN
     @GetMapping("/home")
     public String home() {
-        return "index"; // opens index.html
+        return "index";  // opens index.html
     }
 }
