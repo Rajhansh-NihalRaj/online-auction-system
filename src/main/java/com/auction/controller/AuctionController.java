@@ -17,10 +17,13 @@ public class AuctionController {
 
     @GetMapping("/")
     public String home(Model model, HttpSession session) {
-        if (session.getAttribute("user") == null) return "redirect:/login";
+
+        if (session.getAttribute("user") == null)
+            return "redirect:/login";
 
         model.addAttribute("items", service.getAllItems());
         model.addAttribute("user", session.getAttribute("user"));
+
         return "index";
     }
 
@@ -31,7 +34,9 @@ public class AuctionController {
     }
 
     @GetMapping("/admin")
-    public String admin() { return "admin"; }
+    public String admin() {
+        return "admin";
+    }
 
     @PostMapping("/add-item")
     public String add(String name, String description, double price) {
